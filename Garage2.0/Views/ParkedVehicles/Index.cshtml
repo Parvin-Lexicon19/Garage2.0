@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Garage2._0.Models.ParkedVehicle>
+
+@{
+    ViewData["Title"] = "Parked Vehicles";
+}
+
+<h1>Parked Vehicles</h1>
+
+<p>
+    <a asp-action="Create">Check In</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfWheels)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CheckInTime)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.CheckOutTime)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfWheels)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckInTime)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.CheckOutTime)
+            </td>*@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
