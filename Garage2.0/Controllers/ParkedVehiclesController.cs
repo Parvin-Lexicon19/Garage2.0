@@ -21,8 +21,9 @@ namespace Garage2._0.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
-            var filteredData = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
-            return View(await filteredData.ToListAsync());
+            //it shows only parked vehicles and not the checked out ones
+            var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
+            return View(await parkedVehicles.ToListAsync());
            // return View(await _context.ParkedVehicle.ToListAsync());
         }
 
