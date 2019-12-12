@@ -21,7 +21,9 @@ namespace Garage2._0.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ParkedVehicle.ToListAsync());
+            var filteredData = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
+            return View(await filteredData.ToListAsync());
+           // return View(await _context.ParkedVehicle.ToListAsync());
         }
 
         // GET: ParkedVehicles/Details/5
@@ -31,6 +33,7 @@ namespace Garage2._0.Controllers
             {
                 return NotFound();
             }
+
 
             var parkedVehicle = await _context.ParkedVehicle
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -57,6 +60,8 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid)
             {
+                parkedVehicle.CheckInTime = DateTime.Now;
+                parkedVehicle.CheckOutTime = default(DateTime);
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -139,7 +144,8 @@ namespace Garage2._0.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
-            _context.ParkedVehicle.Remove(parkedVehicle);
+            parkedVehicle.CheckOutTime = DateTime.Now;
+           // _context.ParkedVehicle.Remove(parkedVehicle);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
