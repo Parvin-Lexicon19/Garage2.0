@@ -62,7 +62,9 @@ namespace Garage2._0.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ParkedVehicle.ToListAsync());
+            var filteredData = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
+            return View(await filteredData.ToListAsync());
+           // return View(await _context.ParkedVehicle.ToListAsync());
         }
 
         // GET: ParkedVehicles/Details/5
@@ -72,6 +74,7 @@ namespace Garage2._0.Controllers
             {
                 return NotFound();
             }
+
 
             var parkedVehicle = await _context.ParkedVehicle
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -98,6 +101,8 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid)
             {
+                parkedVehicle.CheckInTime = DateTime.Now;
+                parkedVehicle.CheckOutTime = default(DateTime);
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -180,7 +185,8 @@ namespace Garage2._0.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
-            _context.ParkedVehicle.Remove(parkedVehicle);
+            parkedVehicle.CheckOutTime = DateTime.Now;
+           // _context.ParkedVehicle.Remove(parkedVehicle);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -188,6 +194,42 @@ namespace Garage2._0.Controllers
         private bool ParkedVehicleExists(int id)
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
+        }
+        /*Searches based on RegNo. and Type of vehicle*/
+        public async Task<IActionResult> Filter(string regNo, int? type)
+        {
+            var model = string.IsNullOrWhiteSpace(regNo) ?
+                await _context.ParkedVehicle.ToListAsync() :
+                await _context.ParkedVehicle.Where(m => m.RegNo.Contains(regNo)).ToListAsync();
+
+            model = type == null ?
+                model :
+                model.Where(m => m.Type == (VehicleType)type).ToList();
+
+            return View(nameof(Index), model);
+        }
+        /*Sortes based on Type, Regno, Color or CheckInTime of vehicle*/
+        [HttpGet]
+        public async Task<IActionResult> Sort(string columnName)
+        {
+            switch (columnName)
+            {
+                case "Type":
+                    var model = await _context.ParkedVehicle.OrderByDescending(m => m.Type).ToListAsync();
+                    return View(nameof(Index), model);
+                case "RegNo":
+                    model = await _context.ParkedVehicle.OrderByDescending(m => m.RegNo).ToListAsync();
+                    return View(nameof(Index), model);
+                case "Color":
+                    model = await _context.ParkedVehicle.OrderByDescending(m => m.Color).ToListAsync();
+                    return View(nameof(Index), model);
+                case "CheckInTime":
+                    model = await _context.ParkedVehicle.OrderByDescending(m => m.CheckInTime).ToListAsync();
+                    return View(nameof(Index), model);
+                default:
+                    model = await _context.ParkedVehicle.ToListAsync();
+                    return View(nameof(Index), model);
+            }
         }
     }
 }
