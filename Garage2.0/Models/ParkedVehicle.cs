@@ -17,6 +17,7 @@ namespace Garage2._0.Models
         public string Brand { get; set; }
         public string Model { get; set; }
         public int NoOfWheels { get; set; }
+        [DisplayFormat(DataFormatString = "{0:f}")]
         public DateTime CheckInTime { get; set; }
         public DateTime CheckOutTime { get; set; }
     }
