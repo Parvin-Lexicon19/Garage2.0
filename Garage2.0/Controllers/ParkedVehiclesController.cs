@@ -115,8 +115,8 @@ namespace Garage2._0.Controllers
                 }
                 else
                 {
-                    
-                    ViewBag.Message = "Vehicle with same Regno is parked";
+                    ModelState.AddModelError("RegNo", "Vehicle with same Regno is parked");
+
                     return View();
 
                 }
