@@ -19,7 +19,7 @@ namespace Garage2._0.Controllers
         }
 
         public async Task<IActionResult> Receipt(int? id)
-        {
+        {           
             if (id == null)
             {
                 return NotFound();
@@ -52,13 +52,11 @@ namespace Garage2._0.Controllers
                 model.Totalprice = (totaltime.Days * 100) + ((totaltime.Hours + min) * 5) + "Kr";
             }
 
+            parkedVehicle.CheckOutTime = DateTime.Now;
+            await _context.SaveChangesAsync();
 
-            
-            
-                                                  
             return View(model);
         }
-
 
 
         // GET: ParkedVehicles
@@ -222,7 +220,7 @@ namespace Garage2._0.Controllers
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             parkedVehicle.CheckOutTime = DateTime.Now;
            // _context.ParkedVehicle.Remove(parkedVehicle);
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
@@ -248,6 +246,7 @@ namespace Garage2._0.Controllers
         [HttpGet]
         public async Task<IActionResult> Sort(string columnName)
         {
+            //ViewBag.NameSort = sortOrder == "Name" ? "Name_desc" : "Name";
             var model = await _context.ParkedVehicle.Where(m => m.CheckOutTime.Equals(default(DateTime))).ToListAsync();
             switch (columnName)
             {

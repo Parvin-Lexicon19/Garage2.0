@@ -18,6 +18,8 @@ namespace Garage2._0.Models
         public DateTime CheckInTime { get; set; }
 
         [Display(Name = "CheckOut Time: ")]
+
+       
         public DateTime CheckOutTime { get; set; }
         [Display(Name = "Total Parking Time: ")]
         public string Totalparkingtime { get; set; }
