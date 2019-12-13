@@ -36,7 +36,8 @@ namespace Garage2._0.Controllers
             model.RegNo = parkedVehicle.RegNo;
             model.Type = parkedVehicle.Type;
             model.CheckInTime = parkedVehicle.CheckInTime;
-            model.CheckOutTime = parkedVehicle.CheckOutTime;
+           // model.CheckOutTime = parkedVehicle.CheckOutTime;
+            model.CheckOutTime = DateTime.Now;
             var totaltime = model.CheckOutTime - model.CheckInTime;
             var min = (totaltime.Minutes > 0) ? 1 : 0;
 
