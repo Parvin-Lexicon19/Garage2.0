@@ -8,6 +8,7 @@ namespace Garage2._0.Models
 {
     public class Receipt
     {
+        [Display(Name = "Vehicle Parked: ")]
         public VehicleType Type { get; set; }
 
         [Display(Name = "Reg No: ")]
