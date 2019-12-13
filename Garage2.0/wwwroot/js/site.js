@@ -12,3 +12,7 @@ function printDiv(divName) {
 
     document.body.innerHTML = originalContents;
 }
+function ShowReceipt(id) {
+    window.open('/ParkedVehicles/Receipt/id', "PopupWindow", 'width=600px,height=500px,top=150,left=250');
+}
+
