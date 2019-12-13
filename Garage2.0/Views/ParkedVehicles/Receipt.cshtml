@@ -6,48 +6,57 @@
 
 
 
-    <div id="print" class=" border border-dark p-1 align-content-center justify-content-center">
-        <h1 class="text-center">Receipt</h1>
+    <div id="print" class=" border border-dark border rounded p-1 align-content-center justify-content-center p-3 w-75">
+        <h1 class="text-center text-light bg-success border rounded-lg font-italic "><u class="text-decoration-none ">Receipt</u></h1>
         <br />
-        <dl class="row">
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Type)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Type)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.RegNo)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.RegNo)
-            </dd>
-            <dt class="col-sm-6 text-rignt">
-                @Html.DisplayNameFor(model => model.CheckInTime)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.CheckInTime)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.CheckOutTime)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.CheckOutTime)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Totalparkingtime)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Totalparkingtime)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Totalprice)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Totalprice)
-            </dd>
+        <div class="p-2 bg-secondary text-light vadsomhelst" >
+            <h4>Completed parking</h4>
+           
+            <strong>
+                Paid @{Write($"{Model.Totalprice:C2}");}
+            </strong>
+        </div >
+        <div class="border border-success order rounded-lg">
+            <dl class="row bg #f0ad4e pl-sm-5 ">
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.Type)
+                </dt>
+                <dd class="col-sm-6 text-left">
+                    @Html.DisplayFor(model => model.Type)
+                </dd>
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.RegNo)
+                </dt>
+                <dd class="col-sm-6 ">
+                    @Html.DisplayFor(model => model.RegNo)
+                </dd>
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.CheckInTime)
+                </dt>
+                <dd class="col-sm-6 ">
+                    @Html.DisplayFor(model => model.CheckInTime)
+                </dd>
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.CheckOutTime)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.CheckOutTime)
+                </dd>
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.Totalparkingtime)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Totalparkingtime)
+                </dd>
+                <dt class="col-sm-6 pl-sm-5">
+                    @Html.DisplayNameFor(model => model.Totalprice)
+                </dt>
+                <dd class="col-sm-6 ">
+                    @Html.DisplayFor(model => model.Totalprice)
+                </dd>
 
-        </dl>
+            </dl>
+        </div>
     </div>
 <div class="row m-3 align-content-center justify-content-center">
     <input class="btn-primary btn-lg" type="button" onclick="printDiv('print')" value="Print">
