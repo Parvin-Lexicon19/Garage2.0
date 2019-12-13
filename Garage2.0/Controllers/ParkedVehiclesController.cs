@@ -18,6 +18,49 @@ namespace Garage2._0.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Receipt(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var parkedVehicle = await _context.ParkedVehicle.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (parkedVehicle == null)
+            {
+                return NotFound();
+            }
+
+            var model = new Receipt();
+            model.RegNo = parkedVehicle.RegNo;
+            model.Type = parkedVehicle.Type;
+            model.CheckInTime = parkedVehicle.CheckInTime;
+            model.CheckOutTime = parkedVehicle.CheckOutTime;
+            var totaltime = model.CheckOutTime - model.CheckInTime;
+            var min = (totaltime.Minutes > 0) ? 1 : 0;
+
+
+            if (totaltime.Days == 0)
+            {
+                model.Totalparkingtime = totaltime.Hours + " Hrs " + totaltime.Minutes + " Mins";
+                model.Totalprice = ((totaltime.Hours + min) * 5) + "Kr";
+            }
+            else
+            {
+                model.Totalparkingtime = totaltime.Days + "Days" + " " +totaltime.Hours + "hrs" + " " + totaltime.Minutes + "mins";
+                model.Totalprice = (totaltime.Days * 100) + ((totaltime.Hours + min) * 5) + "Kr";
+            }
+
+
+            
+            
+                                                  
+            return View(model);
+        }
+
+
+
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
