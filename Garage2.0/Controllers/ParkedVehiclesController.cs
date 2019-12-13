@@ -164,15 +164,12 @@ namespace Garage2._0.Controllers
                         return NotFound();
                     }
 
-                    newPostData.Id = parkedVehicle.Id;
                     newPostData.Type = parkedVehicle.Type;
                     newPostData.RegNo = parkedVehicle.RegNo;
                     newPostData.Color = parkedVehicle.Color;
                     newPostData.Brand = parkedVehicle.Brand;
                     newPostData.Model = parkedVehicle.Model;
                     newPostData.NoOfWheels = parkedVehicle.NoOfWheels;
-
-
 
                     await _context.SaveChangesAsync();
                 }
@@ -220,7 +217,7 @@ namespace Garage2._0.Controllers
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             parkedVehicle.CheckOutTime = DateTime.Now;
            // _context.ParkedVehicle.Remove(parkedVehicle);
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
@@ -245,8 +242,7 @@ namespace Garage2._0.Controllers
         /*Sortes based on Type, Regno, Color or CheckInTime of vehicle*/
         [HttpGet]
         public async Task<IActionResult> Sort(string columnName)
-        {
-            //ViewBag.NameSort = sortOrder == "Name" ? "Name_desc" : "Name";
+        {         
             var model = await _context.ParkedVehicle.Where(m => m.CheckOutTime.Equals(default(DateTime))).ToListAsync();
             switch (columnName)
             {
