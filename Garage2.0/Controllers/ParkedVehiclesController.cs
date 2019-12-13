@@ -64,8 +64,10 @@ namespace Garage2._0.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
-            var filteredData = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
-            return View(await filteredData.ToListAsync());
+            // Display only Parked vehicles.
+
+            var parkedData = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
+            return View(await parkedData.ToListAsync());
            // return View(await _context.ParkedVehicle.ToListAsync());
         }
 
@@ -103,9 +105,22 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Populate the current date and Time for checkIN field. Check whether the RegNo of the Vehicle already been parked in garage.
+
                 parkedVehicle.CheckInTime = DateTime.Now;
                 parkedVehicle.CheckOutTime = default(DateTime);
-                _context.Add(parkedVehicle);
+                var findRegNo =  _context.ParkedVehicle.Where(p => p.RegNo == parkedVehicle.RegNo && p.CheckOutTime == default(DateTime)).ToList();
+                if (findRegNo.Count == 0)
+                {
+                    _context.Add(parkedVehicle);
+                }
+                else
+                {
+                    
+                    ViewBag.Message = "Vehicle with same Regno is parked";
+                    return View();
+
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -186,6 +201,8 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Check out will just populate Checkout Time but will not delete any record from DB.
+
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             parkedVehicle.CheckOutTime = DateTime.Now;
            // _context.ParkedVehicle.Remove(parkedVehicle);

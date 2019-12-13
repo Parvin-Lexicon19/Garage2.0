@@ -12,6 +12,7 @@ namespace Garage2._0.Models
         public VehicleType Type { get; set; }
         [Required]
         [MaxLength(20)]
+        
         public string RegNo { get; set; }
         public string Color { get; set; }
         public string Brand { get; set; }
