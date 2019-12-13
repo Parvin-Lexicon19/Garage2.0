@@ -217,7 +217,7 @@ namespace Garage2._0.Controllers
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             parkedVehicle.CheckOutTime = DateTime.Now;
            // _context.ParkedVehicle.Remove(parkedVehicle);
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 

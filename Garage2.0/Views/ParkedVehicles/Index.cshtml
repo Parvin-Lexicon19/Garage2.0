@@ -4,8 +4,8 @@
     ViewData["Title"] = "Parked Vehicles";
 }
 
-<h1>Parked Vehicles</h1>
-<form asp-action="Filter">
+<h1 class="text-light bg-info border rounded-lg" >Parked Vehicles</h1>
+<form class="text-light bg-info border rounded-lg" asp-action="Filter">
     <div class="input-group m-3">
         <input type="text" name="regNo" class="form-control" placeholder="Search on RegNo." />
         <div class="input-group-append">
@@ -19,7 +19,10 @@
     </div>
 </form>
 <p>
-    <a asp-action="Create">Check In</a>
+    
+        <a asp-action="Create">Check In</a>
+    
+   
 </p>
 <table class="table text-center">
     <thead>
