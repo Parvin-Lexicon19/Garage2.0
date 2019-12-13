@@ -6,14 +6,14 @@
 
 
 
-    <div id="print" class=" border border-dark border rounded p-1 align-content-center justify-content-center p-3 w-75">
+    <div id="print" class=" border border-dark border rounded  align-content-center justify-content-center p-3 w-75">
         <h1 class="text-center text-light bg-success border rounded-lg font-italic "><u class="text-decoration-none ">Receipt</u></h1>
         <br />
         <div class="p-2 bg-secondary text-light vadsomhelst" >
             <h4>Completed parking</h4>
            
             <strong>
-                Paid @{Write($"{Model.Totalprice:C2}");}
+                Paid  @Html.DisplayFor(model => model.Totalprice)
             </strong>
         </div >
         <div class="border border-success order rounded-lg">
