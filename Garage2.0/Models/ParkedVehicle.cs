@@ -10,7 +10,7 @@ namespace Garage2._0.Models
     {
         public int Id { get; set; }
         public VehicleType Type { get; set; }
-        [Required]
+        [Required(ErrorMessage = "You must Enter Regno")]
         [MaxLength(20)]
         
         public string RegNo { get; set; }

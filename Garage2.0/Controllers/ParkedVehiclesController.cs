@@ -113,8 +113,8 @@ namespace Garage2._0.Controllers
                 }
                 else
                 {
-                    
-                    ViewBag.Message = "Vehicle with same Regno is parked";
+                    ModelState.AddModelError("RegNo", "Vehicle with same Regno is parked");
+
                     return View();
 
                 }
@@ -145,7 +145,8 @@ namespace Garage2._0.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,RegNo,Color,Brand,Model,NoOfWheels,CheckInTime,CheckOutTime")] ParkedVehicle parkedVehicle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,RegNo,Color,Brand,Model,NoOfWheels")] ParkedVehicle parkedVehicle)
+        // Do not update the CheckInTime field for any changes in other field values.
         {
             if (id != parkedVehicle.Id)
             {
@@ -156,7 +157,23 @@ namespace Garage2._0.Controllers
             {
                 try
                 {
-                    _context.Update(parkedVehicle);
+                    var newPostData = await _context.ParkedVehicle.FindAsync(id);
+
+                    if (newPostData == null)
+                    {
+                        return NotFound();
+                    }
+
+                    newPostData.Id = parkedVehicle.Id;
+                    newPostData.Type = parkedVehicle.Type;
+                    newPostData.RegNo = parkedVehicle.RegNo;
+                    newPostData.Color = parkedVehicle.Color;
+                    newPostData.Brand = parkedVehicle.Brand;
+                    newPostData.Model = parkedVehicle.Model;
+                    newPostData.NoOfWheels = parkedVehicle.NoOfWheels;
+
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
