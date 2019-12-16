@@ -30,7 +30,7 @@
         <tr>
             <th>
                 <div>
-                    <a asp-action="Sort" asp-route-columnName="Type" class="btn btn-primary"><i class="fa fa-search" >Sort</i></a>
+                    <a asp-action="Sort" asp-route-columnName="Type" class="btn btn-primary"><i class="fa fa-search">Sort</i></a>
                 </div>
                 @Html.DisplayNameFor(model => model.Type)
             </th>
@@ -46,24 +46,31 @@
                 </div>
                 @Html.DisplayNameFor(model => model.Color)
             </th>
+
             @*<th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoOfWheels)
-            </th>*@
-        <th>
-            <div>
-                <a asp-action="Sort" asp-route-columnName="CheckInTime" class="btn btn-primary"><i class="fa fa-search">Sort</i></a>
-            </div>
-            @Html.DisplayNameFor(model => model.CheckInTime)
+            @Html.DisplayNameFor(model => model.Brand)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfWheels)
+        </th>*@
+            <th>
+                <div>
+                    <a asp-action="Sort" asp-route-columnName="CheckInTime" class="btn btn-primary"><i class="fa fa-search">Sort</i></a>
+                </div>
+                @Html.DisplayNameFor(model => model.CheckInTime)
+            </th>
+            <th>
+                <div>
+                    <a asp-action="GetStatistic" class="btn btn-outline-secondary"><i class="fa fa-search">Statistic</i></a>
+                </div>
+                
+            </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.CheckOutTime)
-            </th>*@
+            @Html.DisplayNameFor(model => model.CheckOutTime)
+        </th>*@
             <th></th>
         </tr>
     </thead>
