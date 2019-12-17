@@ -4,9 +4,9 @@
     ViewData["Title"] = "Park";
 }
 
-<h1>Park</h1>
+    <h1 class="bg-primary border rounded-lg font-italic text-light p-2">Park Vehicle</h1>
 
-<h4>Park Vehicle</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,32 +14,35 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumSelectList<VehicleType>()"></select>
+                <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumSelectList<VehicleType>()">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RegNo" class="control-label"></label>
-                <input asp-for="RegNo" class="form-control"  />
+                <input asp-for="RegNo" class="form-control"placeholder="Please enter registration number"/>
                 <span asp-validation-for="RegNo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Color" class="control-label"></label>
-                <input asp-for="Color" class="form-control" />
+                <input asp-for="Color" class="form-control"placeholder="Please enter color" />
                 <span asp-validation-for="Color" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
-                <input asp-for="Brand" class="form-control" />
+                <input asp-for="Brand" class="form-control"placeholder="Please enter brand" />
                 <span asp-validation-for="Brand" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
+                <input asp-for="Model" class="form-control"placeholder="Please enter model" />
                 <span asp-validation-for="Model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NoOfWheels" class="control-label"></label>
-                <input asp-for="NoOfWheels" class="form-control" />
+                <input asp-for="NoOfWheels" class="form-control"placeholder="Please enter number of wheels" />
                 <span asp-validation-for="NoOfWheels" class="text-danger"></span>
             </div>
 
