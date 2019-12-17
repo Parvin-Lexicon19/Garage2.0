@@ -63,7 +63,7 @@ namespace Garage2._0.Controllers
 
             //Här
             int totalWheels = 0;
-            DateTime totalTime ;
+        
             var model = new Statistic();
 
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime)).Select (m =>(m.NoOfWheels));
@@ -71,9 +71,27 @@ namespace Garage2._0.Controllers
             {
                 totalWheels += wheel;
             }
-            
 
-            model.TotalVehicles= parkedVehicles.Count();
+            // Get car count
+            var carCount =  _context.ParkedVehicle.Where(p => p.Type == VehicleType.Car).Select(u => u.Type);
+            model.TotalCar = carCount.Count();
+
+            // Get Boat count
+            var boatCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Boat).Select(u => u.Type);
+            model.TotalBoat = boatCount.Count();
+
+            // Get Bus count
+            var busCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Bus).Select(u => u.Type);
+            model.TotalBus = busCount.Count();
+
+            // Get Airplane count
+            var airplaneCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Airplane).Select(u => u.Type);
+            model.TotalAirplane = airplaneCount.Count();
+
+            // Get Motorcycle count
+            var motorBikeCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Motorcycle).Select(u => u.Type);
+            model.TotalMotorbike = motorBikeCount.Count();
+
             model.TotalWheels = totalWheels;
             
             await _context.SaveChangesAsync();
