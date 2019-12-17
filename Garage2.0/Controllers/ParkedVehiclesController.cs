@@ -351,39 +351,46 @@ namespace Garage2._0.Controllers
             for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
                 if (ParkingSlots.Slots[i, 0].Equals(0))
                 {
-                    ParkingSlots.Slots[i, 0] = Type;
-                    switch (Type)
-                    {
-                            case (int)VehicleType.Car:                            
-                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
-                            {
-                                ParkingSlots.Slots[i, j] = id;
-                            }
-                            return;
-                        case (int)VehicleType.Bus:                           
-                            ParkingSlots.Slots[i + 1, 0] = Type;
-                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
-                            {
-                                ParkingSlots.Slots[i, j] = id;
-                                ParkingSlots.Slots[i + 1, j] = id;
-                            }
-                            return;
-                        case (int)VehicleType.Boat:
-                        case (int)VehicleType.Airplane:                            
-                            ParkingSlots.Slots[i +1, 0] = Type;
-                            ParkingSlots.Slots[i +2, 0] = Type;
+                        switch (Type)
+                        {
+                            case (int)VehicleType.Car:
+                                ParkingSlots.Slots[i, 0] = Type;
+                                for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                                    ParkingSlots.Slots[i, j] = id;
 
-                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
-                            {
-                                ParkingSlots.Slots[i, j] = id;
-                                ParkingSlots.Slots[i + 1, j] = id;
-                                ParkingSlots.Slots[i +2, j] = id;
-                            }
-                            return;                        
-                        
-                        default:
-                            break;
-                    }
+                                return;
+                            case (int)VehicleType.Bus:
+                                if(ParkingSlots.Slots[i + 1, 0].Equals(0))
+                                {
+                                    ParkingSlots.Slots[i, 0] = Type;
+                                    ParkingSlots.Slots[i + 1, 0] = Type;
+                                    for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                                    {
+                                        ParkingSlots.Slots[i, j] = id;
+                                        ParkingSlots.Slots[i + 1, j] = id;
+                                    }
+                                    return;
+                                }
+                                break; 
+                            case (int)VehicleType.Boat:
+                            case (int)VehicleType.Airplane:
+                                if (ParkingSlots.Slots[i + 1, 0].Equals(0))
+                                {
+                                    ParkingSlots.Slots[i, 0] = Type;
+                                    ParkingSlots.Slots[i + 1, 0] = Type;
+                                    ParkingSlots.Slots[i + 2, 0] = Type;
+                                    for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                                    {
+                                        ParkingSlots.Slots[i, j] = id;
+                                        ParkingSlots.Slots[i + 1, j] = id;
+                                        ParkingSlots.Slots[i + 2, j] = id;
+                                    }
+                                    return;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     
                 }
         }
