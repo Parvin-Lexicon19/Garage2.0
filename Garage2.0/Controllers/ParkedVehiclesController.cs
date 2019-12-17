@@ -12,10 +12,11 @@ namespace Garage2._0.Controllers
     public class ParkedVehiclesController : Controller
     {
         private readonly Garage2_0Context _context;
-
+        static private ParkingSlots parkingSlot;
         public ParkedVehiclesController(Garage2_0Context context)
         {
             _context = context;
+            parkingSlot = new ParkingSlots();
         }
 
         public async Task<IActionResult> Receipt(int? id)
@@ -74,6 +75,22 @@ namespace Garage2._0.Controllers
             {
                 totalWheels += wheel;
             }
+
+            // Get car count
+            var carCount =  _context.ParkedVehicle.Where(p => p.Type == VehicleType.Car).Select(u => u.Type);
+            model.TotalCar = carCount.Count();
+
+            // Get Boat count
+            var boatCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Boat).Select(u => u.Type);
+            model.TotalBoat = boatCount.Count();
+
+            // Get Bus count
+            var busCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Bus).Select(u => u.Type);
+            model.TotalBus = busCount.Count();
+
+            // Get Airplane count
+            var airplaneCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Airplane).Select(u => u.Type);
+            model.TotalAirplane = airplaneCount.Count();
             var totTimeChIn = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime)).Select(m => (m.CheckInTime));
             foreach (var chTime in totTimeChIn)
             {
@@ -86,6 +103,10 @@ namespace Garage2._0.Controllers
 
             model.TotalParkedVehiclePrice = (int)totalParkTime;
             model.TotalVehicles= parkedVehicles.Count();
+            // Get Motorcycle count
+            var motorBikeCount = _context.ParkedVehicle.Where(p => p.Type == VehicleType.Motorcycle).Select(u => u.Type);
+            model.TotalMotorbike = motorBikeCount.Count();
+
             model.TotalWheels = totalWheels;
             
             await _context.SaveChangesAsync();
@@ -96,6 +117,7 @@ namespace Garage2._0.Controllers
             // GET: ParkedVehicles
             public async Task<IActionResult> Index()
         {
+            //Content($"Hello {freePlaces}");
             //it shows only parked vehicles and not the checked out ones
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
             return View(await parkedVehicles.ToListAsync());
@@ -136,6 +158,8 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid)
             {
+                
+
                 // Populate the current date and Time for checkIN field. Check whether the RegNo of the Vehicle already been parked in garage.
 
                 parkedVehicle.CheckInTime = DateTime.Now;
@@ -153,6 +177,7 @@ namespace Garage2._0.Controllers
 
                 }
                 await _context.SaveChangesAsync();
+                Park(parkedVehicle.Id, (int)parkedVehicle.Type);
                 return RedirectToAction(nameof(Index));
             }
             return View(parkedVehicle);
@@ -296,6 +321,71 @@ namespace Garage2._0.Controllers
                     break;
             }
             return View(nameof(Index), model);
+        }
+        private void Park(int id, int Type)
+        {
+            if (Type.Equals((int)VehicleType.Motorcycle))
+            {
+                for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+                {
+                    if (ParkingSlots.Slots[i, 0].Equals(0))
+                    {
+                        ParkingSlots.Slots[i, 0] = Type;
+                        ParkingSlots.Slots[i, 1] = id;
+                        return;
+                    }
+                    else if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle))
+                    {
+                        for (int j = 2; j < ParkingSlots.Slots.GetLength(1); j++)
+                        {
+                            if (ParkingSlots.Slots[i, j].Equals(0))
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                                return;
+                            }
+                        }
+                    }
+                }                    
+            }                
+            else
+            for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+                if (ParkingSlots.Slots[i, 0].Equals(0))
+                {
+                    ParkingSlots.Slots[i, 0] = Type;
+                    switch (Type)
+                    {
+                            case (int)VehicleType.Car:                            
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                            }
+                            return;
+                        case (int)VehicleType.Bus:                           
+                            ParkingSlots.Slots[i + 1, 0] = Type;
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                                ParkingSlots.Slots[i + 1, j] = id;
+                            }
+                            return;
+                        case (int)VehicleType.Boat:
+                        case (int)VehicleType.Airplane:                            
+                            ParkingSlots.Slots[i +1, 0] = Type;
+                            ParkingSlots.Slots[i +2, 0] = Type;
+
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                                ParkingSlots.Slots[i + 1, j] = id;
+                                ParkingSlots.Slots[i +2, j] = id;
+                            }
+                            return;                        
+                        
+                        default:
+                            break;
+                    }
+                    
+                }
         }
     }
 }
