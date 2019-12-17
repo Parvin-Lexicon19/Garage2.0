@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "GetStatistic";
 }
+    <div class=" border border-dark border rounded  align-content-center justify-content-center p-3 w-75">
+        <h1 class="bg-primary border rounded-lg font-italic text-light p-2">Parking Statistic</h1>
 
 <h1>GetStatistic</h1>
 
@@ -54,7 +56,32 @@
         </dd>
     </dl>
 </div>
+        <div>
+
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-6 h5">
+                    <p class="text-info h5 m-2">Total Vehicles</p>
+                </dt>
+                <dd class="col-sm-6 h5">
+                    @Html.DisplayFor(model => model.TotalVehicles)  Vehicles
+                </dd>
+                <dt class="col-sm-6 h5">
+                    <p class="text-info h5 m-2">Total Wheels in the parking</p>
+                </dt>
+                <dd class="col-sm-6 h5">
+                    @Html.DisplayFor(model => model.TotalWheels) Wheels
+                </dd>
+                <dt class="col-sm-6">
+                    <p class="text-info h5 m-2"> Total Parked Vehicle Price</p>
+                </dt>
+                <dd class="col-sm-6 h5">
+                    @Html.DisplayFor(model => model.TotalParkedVehiclePrice) kr
+                </dd>
+            </dl>
+        </div>
+    </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @*Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+    <a class="btn btn-outline-primary mt-3"  asp-action="Index">Back to List</a>
 </div>
