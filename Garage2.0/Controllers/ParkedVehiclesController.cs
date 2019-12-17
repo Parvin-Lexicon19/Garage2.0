@@ -58,10 +58,32 @@ namespace Garage2._0.Controllers
 
             return View(model);
         }
+        public async Task<IActionResult> GetStatistic()
+        {
+            
 
+            //Här
+            int totalWheels = 0;
+            DateTime totalTime ;
+            var model = new Statistic();
 
-        // GET: ParkedVehicles
-        public async Task<IActionResult> Index(string freePlaces)
+            var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime)).Select (m =>(m.NoOfWheels));
+            foreach (var wheel in parkedVehicles)
+            {
+                totalWheels += wheel;
+            }
+            
+
+            model.TotalVehicles= parkedVehicles.Count();
+            model.TotalWheels = totalWheels;
+            
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+       
+            // GET: ParkedVehicles
+            public async Task<IActionResult> Index()
         {
             //Content($"Hello {freePlaces}");
             //it shows only parked vehicles and not the checked out ones
