@@ -60,7 +60,9 @@ namespace Garage2._0.Controllers
         }
         public async Task<IActionResult> GetStatistic()
         {
-         
+            ViewBag.NoOfFreePlaces = GetFreeSlotsNo();
+            ViewBag.NoOfFreePlacesForMotorcycle = GetFreeSlotsNoForMotorcycle();
+
             int totalWheels = 0;
             double totalMin = 0;
             DateTime nowTime = DateTime.Now;
