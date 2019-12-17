@@ -118,6 +118,8 @@ namespace Garage2._0.Controllers
             public async Task<IActionResult> Index()
         {
             //Content($"Hello {freePlaces}");
+            ViewBag.NoOfFreePlace = "10";
+            ViewBag.NoOfFreePlaceMotorcycle = "10";
             //it shows only parked vehicles and not the checked out ones
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
             return View(await parkedVehicles.ToListAsync());
