@@ -11,19 +11,18 @@
         <div class="input-group-append">
             <select name="type" asp-items="@Html.GetEnumSelectList<VehicleType>()" class="form-control">
                 <option selected="selected" value="">Please select</option>
-                
             </select>
         </div>
         <div class="input-group-append">
             <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;Search</i></button>
         </div>
     </div>
+    @*<p>
+        <label for="freePlaces"></label>
+    </p>*@
 </form>
 <p>
-    
-        <a asp-action="Create">Check In</a>
-    
-   
+    <a asp-action="Create">Check In</a>
 </p>
 <table class="table text-center">
     <thead>

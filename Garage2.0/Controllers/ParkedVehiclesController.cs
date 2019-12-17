@@ -12,10 +12,11 @@ namespace Garage2._0.Controllers
     public class ParkedVehiclesController : Controller
     {
         private readonly Garage2_0Context _context;
-
+        static private ParkingSlots parkingSlot;
         public ParkedVehiclesController(Garage2_0Context context)
         {
             _context = context;
+            parkingSlot = new ParkingSlots();
         }
 
         public async Task<IActionResult> Receipt(int? id)
@@ -60,8 +61,9 @@ namespace Garage2._0.Controllers
 
 
         // GET: ParkedVehicles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string freePlaces)
         {
+            //Content($"Hello {freePlaces}");
             //it shows only parked vehicles and not the checked out ones
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
             return View(await parkedVehicles.ToListAsync());
@@ -119,6 +121,7 @@ namespace Garage2._0.Controllers
 
                 }
                 await _context.SaveChangesAsync();
+                Park(parkedVehicle.Id, (int) parkedVehicle.Type);
                 return RedirectToAction(nameof(Index));
             }
             return View(parkedVehicle);
@@ -262,6 +265,39 @@ namespace Garage2._0.Controllers
                     break;
             }
             return View(nameof(Index), model);
+        }
+        private void Park(int id, int Type)
+        {
+            for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+
+                if (ParkingSlots.Slots[i, 0].Equals(0))
+                {
+                    switch (Type)
+                    {
+                        case (int)VehicleType.Car:
+                            ParkingSlots.Slots[i, 0] = Type;
+
+                            for (int j = 0; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                            }
+                            return;
+
+                        case (int)VehicleType.Boat:
+                            ParkingSlots.Slots[i, 0] = Type;
+
+                            for (int j = 0; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, 1] = id;
+                                ParkingSlots.Slots[i+1, 1] = id;
+                                ParkingSlots.Slots[i+2, 1] = id;
+                            }
+                            return;
+                        default:
+                            break;
+                    }
+                    
+                }
         }
     }
 }

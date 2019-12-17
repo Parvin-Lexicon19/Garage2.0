@@ -26,10 +26,10 @@ namespace Garage2._0.Models
 
     public enum VehicleType
     {
-        Car,
-        Boat,
-        Bus,
-        Motorcycle,
-        Airplane
+        Car = 1,
+        Boat = 2,
+        Bus = 3,
+        Motorcycle = 4,
+        Airplane = 5
     }
 }
