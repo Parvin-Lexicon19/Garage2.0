@@ -113,17 +113,17 @@ namespace Garage2._0.Controllers
 
             return View(model);
         }
-       
-            // GET: ParkedVehicles
-            public async Task<IActionResult> Index()
+
+        // GET: ParkedVehicles
+        public async Task<IActionResult> Index()
         {
-            //Content($"Hello {freePlaces}");
-            ViewBag.NoOfFreePlace = GetFreeSlotsNo();
-            ViewBag.NoOfFreePlaceMotorcycle = GetFreeSlotsNoMotorcycle();
+
+            ViewBag.NoOfFreePlaces = GetFreeSlotsNo();
+            ViewBag.NoOfFreePlacesForMotorcycle = GetFreeSlotsNoForMotorcycle();
+            
             //it shows only parked vehicles and not the checked out ones
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
             return View(await parkedVehicles.ToListAsync());
-           // return View(await _context.ParkedVehicle.ToListAsync());
         }
 
         // GET: ParkedVehicles/Details/5
@@ -324,21 +324,32 @@ namespace Garage2._0.Controllers
             }
             return View(nameof(Index), model);
         }
+        //Assigns a slot to the vehicle when it checks in
+        //    1/3 slot for Motorcycle
+        //    1 slot for Car
+        //    2 for Bus
+        //    3 for Boat and Airplane
+        // The Slots Array has 100 indexes, every index refers to another array of 4 indexes which has its first index as VehicleType 
+        // and 2nd, 3rd and 4th as possible Motorcycle IDs or all the 3 indexes has the same ID if Vehicle Type is Car, Boat, ...
         private void Park(int id, int Type)
         {
+            //For Motorcycle, checks to see if there is free slot next to already parked Motrorcycle in order to save parking space 
+            //for other bigger in size vehicles
             if (Type.Equals((int)VehicleType.Motorcycle))
             {
-                for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+                for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++) // Number of slots which is 100 here
                 {
-                    if (ParkingSlots.Slots[i, 0].Equals(0))
+                    if (ParkingSlots.Slots[i, 0].Equals(0)) 
                     {
                         ParkingSlots.Slots[i, 0] = Type;
                         ParkingSlots.Slots[i, 1] = id;
                         return;
                     }
-                    else if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle))
+                    //if the first index contains Motocycle Type (Enum), it may have palce for another motorcycle
+                    else if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle)) 
                     {
-                        for (int j = 2; j < ParkingSlots.Slots.GetLength(1); j++)
+                        //parks the new Motorcycle in 2nd or 3rd place, Indexes 3 or 4 of the slot (which has already a Motorcycle in)
+                        for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
                         {
                             if (ParkingSlots.Slots[i, j].Equals(0))
                             {
@@ -349,7 +360,7 @@ namespace Garage2._0.Controllers
                     }
                 }                    
             }                
-            else
+            else //For other Vehicle Types
             for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
                 if (ParkingSlots.Slots[i, 0].Equals(0))
                 {
@@ -359,7 +370,6 @@ namespace Garage2._0.Controllers
                                 ParkingSlots.Slots[i, 0] = Type;
                                 for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
                                     ParkingSlots.Slots[i, j] = id;
-
                                 return;
                             case (int)VehicleType.Bus:
                                 if(ParkingSlots.Slots[i + 1, 0].Equals(0))
@@ -376,7 +386,7 @@ namespace Garage2._0.Controllers
                                 break; 
                             case (int)VehicleType.Boat:
                             case (int)VehicleType.Airplane:
-                                if (ParkingSlots.Slots[i + 1, 0].Equals(0))
+                                if (ParkingSlots.Slots[i + 1, 0].Equals(0) && ParkingSlots.Slots[i + 2, 0].Equals(0))
                                 {
                                     ParkingSlots.Slots[i, 0] = Type;
                                     ParkingSlots.Slots[i + 1, 0] = Type;
@@ -392,8 +402,7 @@ namespace Garage2._0.Controllers
                                 break;
                             default:
                                 break;
-                        }
-                    
+                        }                    
                 }
         }
         private int GetFreeSlotsNo()
@@ -406,7 +415,7 @@ namespace Garage2._0.Controllers
             }
             return freeSlotsNo;
         }
-        private int GetFreeSlotsNoMotorcycle()
+        private int GetFreeSlotsNoForMotorcycle()
         {
             int freeSlotsNoM = 0;
             for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
@@ -415,11 +424,13 @@ namespace Garage2._0.Controllers
                     freeSlotsNoM += 3;
                 else
                     if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle))
-                    for (int j = 2; j < ParkingSlots.Slots.GetLength(1); j++)
+                {
+                    for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
                     {
-                        if (!ParkingSlots.Slots[i, j].Equals(0))
+                        if (ParkingSlots.Slots[i, j].Equals(0))
                             freeSlotsNoM++;
                     }
+                }
             }
             return freeSlotsNoM;
         } 
