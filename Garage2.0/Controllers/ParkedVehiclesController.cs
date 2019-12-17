@@ -59,11 +59,14 @@ namespace Garage2._0.Controllers
         }
         public async Task<IActionResult> GetStatistic()
         {
-            
-
-            //Här
+         
             int totalWheels = 0;
-            DateTime totalTime ;
+            double totalMin = 0;
+            DateTime nowTime = DateTime.Now;
+            int nowTimeResult = nowTime.Year * 10000 + nowTime.Month * 100 + nowTime.Day + nowTime.Hour + nowTime.Minute ;
+            double timePrice = 0;
+            double totalParkTime =0;
+            
             var model = new Statistic();
 
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime)).Select (m =>(m.NoOfWheels));
@@ -71,8 +74,17 @@ namespace Garage2._0.Controllers
             {
                 totalWheels += wheel;
             }
+            var totTimeChIn = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime)).Select(m => (m.CheckInTime));
+            foreach (var chTime in totTimeChIn)
+            {
+                int chTimeResult = chTime.Year * 10000 + chTime.Month * 100 + chTime.Day + chTime.Hour + chTime.Minute ;
+                totalMin = nowTimeResult - chTimeResult;
+                timePrice = totalMin * 0.083;
+                totalParkTime += timePrice;
+            }
             
 
+            model.TotalParkedVehiclePrice = (int)totalParkTime;
             model.TotalVehicles= parkedVehicles.Count();
             model.TotalWheels = totalWheels;
             
