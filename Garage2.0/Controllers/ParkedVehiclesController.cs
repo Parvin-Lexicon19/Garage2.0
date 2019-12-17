@@ -118,8 +118,8 @@ namespace Garage2._0.Controllers
             public async Task<IActionResult> Index()
         {
             //Content($"Hello {freePlaces}");
-            ViewBag.NoOfFreePlace = "10";
-            ViewBag.NoOfFreePlaceMotorcycle = "10";
+            ViewBag.NoOfFreePlace = GetFreeSlotsNo();
+            ViewBag.NoOfFreePlaceMotorcycle = GetFreeSlotsNoMotorcycle();
             //it shows only parked vehicles and not the checked out ones
             var parkedVehicles = _context.ParkedVehicle.Where(p => (p.CheckOutTime) == default(DateTime));
             return View(await parkedVehicles.ToListAsync());
@@ -396,5 +396,32 @@ namespace Garage2._0.Controllers
                     
                 }
         }
+        private int GetFreeSlotsNo()
+        {
+            int freeSlotsNo = 0;
+            for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+            {
+                if (ParkingSlots.Slots[i, 0].Equals(0))
+                    freeSlotsNo++;
+            }
+            return freeSlotsNo;
+        }
+        private int GetFreeSlotsNoMotorcycle()
+        {
+            int freeSlotsNoM = 0;
+            for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+            {
+                if (ParkingSlots.Slots[i, 0].Equals(0))
+                    freeSlotsNoM += 3;
+                else
+                    if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle))
+                    for (int j = 2; j < ParkingSlots.Slots.GetLength(1); j++)
+                    {
+                        if (!ParkingSlots.Slots[i, j].Equals(0))
+                            freeSlotsNoM++;
+                    }
+            }
+            return freeSlotsNoM;
+        } 
     }
 }
