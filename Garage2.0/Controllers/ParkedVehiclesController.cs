@@ -126,6 +126,8 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid)
             {
+                
+
                 // Populate the current date and Time for checkIN field. Check whether the RegNo of the Vehicle already been parked in garage.
 
                 parkedVehicle.CheckInTime = DateTime.Now;
@@ -143,7 +145,7 @@ namespace Garage2._0.Controllers
 
                 }
                 await _context.SaveChangesAsync();
-                Park(parkedVehicle.Id, (int) parkedVehicle.Type);
+                Park(parkedVehicle.Id, (int)parkedVehicle.Type);
                 return RedirectToAction(nameof(Index));
             }
             return View(parkedVehicle);
@@ -290,31 +292,63 @@ namespace Garage2._0.Controllers
         }
         private void Park(int id, int Type)
         {
+            if (Type.Equals((int)VehicleType.Motorcycle))
+            {
+                for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
+                {
+                    if (ParkingSlots.Slots[i, 0].Equals(0))
+                    {
+                        ParkingSlots.Slots[i, 0] = Type;
+                        ParkingSlots.Slots[i, 1] = id;
+                        return;
+                    }
+                    else if (ParkingSlots.Slots[i, 0].Equals((int)VehicleType.Motorcycle))
+                    {
+                        for (int j = 2; j < ParkingSlots.Slots.GetLength(1); j++)
+                        {
+                            if (ParkingSlots.Slots[i, j].Equals(0))
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                                return;
+                            }
+                        }
+                    }
+                }                    
+            }                
+            else
             for (int i = 0; i < ParkingSlots.Slots.GetLength(0); i++)
-
                 if (ParkingSlots.Slots[i, 0].Equals(0))
                 {
+                    ParkingSlots.Slots[i, 0] = Type;
                     switch (Type)
                     {
-                        case (int)VehicleType.Car:
-                            ParkingSlots.Slots[i, 0] = Type;
-
-                            for (int j = 0; j < ParkingSlots.Slots.GetLength(1); j++)
+                            case (int)VehicleType.Car:                            
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
                             {
                                 ParkingSlots.Slots[i, j] = id;
                             }
                             return;
-
-                        case (int)VehicleType.Boat:
-                            ParkingSlots.Slots[i, 0] = Type;
-
-                            for (int j = 0; j < ParkingSlots.Slots.GetLength(1); j++)
+                        case (int)VehicleType.Bus:                           
+                            ParkingSlots.Slots[i + 1, 0] = Type;
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
                             {
-                                ParkingSlots.Slots[i, 1] = id;
-                                ParkingSlots.Slots[i+1, 1] = id;
-                                ParkingSlots.Slots[i+2, 1] = id;
+                                ParkingSlots.Slots[i, j] = id;
+                                ParkingSlots.Slots[i + 1, j] = id;
                             }
                             return;
+                        case (int)VehicleType.Boat:
+                        case (int)VehicleType.Airplane:                            
+                            ParkingSlots.Slots[i +1, 0] = Type;
+                            ParkingSlots.Slots[i +2, 0] = Type;
+
+                            for (int j = 1; j < ParkingSlots.Slots.GetLength(1); j++)
+                            {
+                                ParkingSlots.Slots[i, j] = id;
+                                ParkingSlots.Slots[i + 1, j] = id;
+                                ParkingSlots.Slots[i +2, j] = id;
+                            }
+                            return;                        
+                        
                         default:
                             break;
                     }
