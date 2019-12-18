@@ -292,6 +292,9 @@ namespace Garage2._0.Controllers
         /*Searches based on RegNo. and Type of vehicle*/
         public async Task<IActionResult> Filter(string regNo, int? type)
         {
+            ViewBag.NoOfFreePlaces = GetFreeSlotsNo();
+            ViewBag.NoOfFreePlacesForMotorcycle = GetFreeSlotsNoForMotorcycle();
+
             var model = await _context.ParkedVehicle.Where(m => m.CheckOutTime.Equals(default(DateTime))).ToListAsync();
             model = string.IsNullOrWhiteSpace(regNo) ?
                 model :
@@ -306,7 +309,10 @@ namespace Garage2._0.Controllers
         /*Sortes based on Type, Regno, Color or CheckInTime of vehicle*/
         [HttpGet]
         public async Task<IActionResult> Sort(string columnName)
-        {         
+        {
+            ViewBag.NoOfFreePlaces = GetFreeSlotsNo();
+            ViewBag.NoOfFreePlacesForMotorcycle = GetFreeSlotsNoForMotorcycle();
+
             var model = await _context.ParkedVehicle.Where(m => m.CheckOutTime.Equals(default(DateTime))).ToListAsync();
             switch (columnName)
             {
