@@ -298,7 +298,7 @@ namespace Garage2._0.Controllers
             var model = await _context.ParkedVehicle.Where(m => m.CheckOutTime.Equals(default(DateTime))).ToListAsync();
             model = string.IsNullOrWhiteSpace(regNo) ?
                 model :
-                model.Where(m => m.RegNo.Contains(regNo)).ToList();
+                model.Where(m => m.RegNo.ToLower().Contains(regNo.ToLower())).ToList();
 
             model = type == null ?
                 model :
